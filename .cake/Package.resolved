@@ -1,0 +1,79 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "AppUpdater",
+        "repositoryURL": "https://github.com/mxcl/AppUpdater.git",
+        "state": {
+          "branch": null,
+          "revision": "ea7581f82be70c5e1b72181807d70812112db3dc",
+          "version": "1.0.2"
+        }
+      },
+      {
+        "package": "PMKCloudKit",
+        "repositoryURL": "https://github.com/PromiseKit/CloudKit.git",
+        "state": {
+          "branch": null,
+          "revision": "4e09821c736b5544461bbd997904e4a0958a1e6f",
+          "version": "3.1.2"
+        }
+      },
+      {
+        "package": "PMKFoundation",
+        "repositoryURL": "https://github.com/PromiseKit/Foundation",
+        "state": {
+          "branch": null,
+          "revision": "04b196a1cb3ce65a404724c4e6e87c43c56542a4",
+          "version": "3.3.1"
+        }
+      },
+      {
+        "package": "LegibleError",
+        "repositoryURL": "https://github.com/mxcl/LegibleError.git",
+        "state": {
+          "branch": null,
+          "revision": "c615c01e461e8a3495ba4ea75f5d671c76820105",
+          "version": "1.0.1"
+        }
+      },
+      {
+        "package": "OrderedSet",
+        "repositoryURL": "https://github.com/Weebly/OrderedSet.git",
+        "state": {
+          "branch": null,
+          "revision": "4247c60cc190dbbaff63ecfe42bd7a1f2cbaf225",
+          "version": "3.1.0"
+        }
+      },
+      {
+        "package": "Path.swift",
+        "repositoryURL": "https://github.com/mxcl/Path.swift.git",
+        "state": {
+          "branch": null,
+          "revision": "e915bc0cfb5bcee9d48adfdb9e8208d07291c0e8",
+          "version": "0.16.0"
+        }
+      },
+      {
+        "package": "PromiseKit",
+        "repositoryURL": "https://github.com/mxcl/PromiseKit.git",
+        "state": {
+          "branch": null,
+          "revision": "db3b2aaf0b26299c1828e0a302adf1a5523f4af5",
+          "version": "6.8.3"
+        }
+      },
+      {
+        "package": "Version",
+        "repositoryURL": "https://github.com/mxcl/Version",
+        "state": {
+          "branch": null,
+          "revision": "aac9b1f06cb1767224c6cbe9bf0083252f29c980",
+          "version": "1.0.2"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
