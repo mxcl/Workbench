@@ -2,7 +2,7 @@
 
 Seamless, automatic, “dotfile” sync to iCloud.
 
-<img src="Documents/Screenshot.1.png" width="450" height="461">
+<img src="Documents/Screenshot.1.png" width="450">
 
 Workbench is an effective way to keep a backup of your Dotfiles that can be
 easily restored when you clean install macOS.
