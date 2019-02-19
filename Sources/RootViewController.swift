@@ -22,7 +22,7 @@ class RootViewController: NSViewController {
         menu.addItem(.separator())
         menu.addItem(.init(title: "Donate…", action: #selector(onDonateClicked), keyEquivalent: ""))
         menu.addItem(.separator())
-        menu.addItem(.init(title: "Quit Workbench", action: #selector(NSApplication.terminate), keyEquivalent: "Q"))
+        menu.addItem(.init(title: "Quit Workbench", action: #selector(NSApplication.terminate), keyEquivalent: "q"))
         menu.popUp(withCorrectThemePositioningItem: menu.item(at: 0), atLocation: NSEvent.mouseLocation)
     }
 
