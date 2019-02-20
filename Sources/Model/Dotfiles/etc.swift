@@ -7,6 +7,6 @@ var db: CKDatabase {
 
 extension String {
     static let recordType = "dotfile"
-    static let data = "data"
+    static let asset = "asset"
     static let checksum = "md5"
 }

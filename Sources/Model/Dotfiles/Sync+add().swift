@@ -68,9 +68,12 @@ extension Sync {
 
         return DispatchQueue.global().async(.promise) {
             let record = CKRecord(recordType: .recordType, recordID: CKRecord.ID(recordName: relativePath))
-            let data = try Data(contentsOf: validatedUrl)
-            record[.data] = data as CKRecordValue
-            record[.checksum] = data.md5 as CKRecordValue
+            
+            let checksum = try Data(contentsOf: validatedUrl).md5
+            let asset = CKAsset(fileURL: validatedUrl)
+
+            record[.asset] = asset
+            record[.checksum] = checksum as CKRecordValue
             return record
         }.then {
             save($0)
