@@ -61,7 +61,7 @@ public class Sync {
         case .synced:
             break
         case .error:
-            upload(item: item)
+            upload(item: item, overwrite: true)
         case .networking:
             break
         }
@@ -91,7 +91,7 @@ extension Sync: FSWatcherDelegate {
                 return
             }
 
-            upload(item: item)
+            upload(item: item, overwrite: false)
         }
 
         delegate?.dotfilesSyncItemsUpdated()

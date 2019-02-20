@@ -2,11 +2,17 @@ import protocol CloudKit.CKRecordValue
 import struct Foundation.Data
 import PMKCloudKit
 import PromiseKit
+import CloudKit
 import Dispatch
 import Path
 
 private extension Item {
-    func upload() -> Promise<Void> {
+    func upload(overwrite: Bool) -> Promise<Void> {
+
+        let op = CKModifyRecordsOperation()
+        op.recordsToSave = [record]
+        op.savePolicy = overwrite ? .changedKeys : .ifServerRecordUnchanged
+
         return DispatchQueue.global().async(.promise) {
             let data = try Data(contentsOf: Path.home/self.relativePath)
 
@@ -14,8 +20,11 @@ private extension Item {
             self.record[.data] = data as CKRecordValue
             self.record[.checksum] = data.md5 as CKRecordValue
         }.then {
-            db.save(self.record)
-        }.done { _ in
+            Promise<Void> { seal in
+                op.modifyRecordsCompletionBlock = { _, _, error in seal.resolve(error) }
+                db.add(op)
+            }
+        }.done {
             self.status = .init(record: self.record)
         }.recover {
             self.status = .error($0); throw $0
@@ -28,7 +37,7 @@ private extension Item {
 }
 
 extension Sync {
-    func upload(item: Item) {
+    func upload(item: Item, overwrite: Bool) {
         dispatchPrecondition(condition: .onQueue(.main))
 
         func go() -> Promise<Void> {
@@ -37,7 +46,7 @@ extension Sync {
                 item.status = .networking(p)
                 self.delegate?.dotfilesSyncItemsUpdated()
             }.then {
-                item.upload()
+                item.upload(overwrite: overwrite)
             }
             return p
         }
