@@ -1,4 +1,5 @@
 import protocol CloudKit.CKRecordValue
+import class CloudKit.CKAsset
 import struct Foundation.Data
 import PMKCloudKit
 import PromiseKit
@@ -8,11 +9,14 @@ import Path
 private extension Item {
     func upload() -> Promise<Void> {
         return DispatchQueue.global().async(.promise) {
-            let data = try Data(contentsOf: Path.home/self.relativePath)
-
+            let path = Path.home/self.relativePath
+            
+            let checksum = try Data(contentsOf: path).md5
+            let asset = CKAsset(fileURL: path.url)
+            
             //FIXME are these thread safe?
-            self.record[.data] = data as CKRecordValue
-            self.record[.checksum] = data.md5 as CKRecordValue
+            self.record[.asset] = asset
+            self.record[.checksum] = checksum as CKRecordValue
         }.then {
             db.save(self.record)
         }.done { _ in
