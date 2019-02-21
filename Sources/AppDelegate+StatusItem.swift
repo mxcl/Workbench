@@ -8,6 +8,11 @@ extension AppDelegate {
         // to leave the button highlighted while the popover appears
         // even if we set isHighlighted in the action, this way does.
         NSEvent.addLocalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { [weak self] event in
+                                                                                       
+            if event.modifierFlags.contains(NSEvent.ModifierFlags.command) {
+                return event
+            }
+                                                                                       
             if event.window == self?.statusItem.button?.window {
                 self?.onStatusBarItemClicked()
                 return nil
