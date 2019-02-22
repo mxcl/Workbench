@@ -9,5 +9,3 @@ dependencies = [
     .github("PromiseKit/CloudKit" ~> 3.1),
     .github("mxcl/AppUpdater" ~> 1.0)
 ]
-
-platforms = [.macOS ~> 10.14]
