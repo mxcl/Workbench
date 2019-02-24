@@ -9,6 +9,9 @@ class RootViewController: NSViewController {
 
     override func viewDidLoad() {
         versionLabel.stringValue = "Workbench \(Bundle.main.version)"
+      #if DEBUG
+        versionLabel.stringValue += "-debug"
+      #endif
     }
 
     @IBAction func onMiscClicked(_ sender: Any) {

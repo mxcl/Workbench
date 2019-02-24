@@ -58,10 +58,10 @@ public class Sync {
     private func announce(_ promise: Promise<Void>) {
         delegate?.dotfilesSyncItemsUpdated()
 
-        promise.done { [weak self] in
-            self?.delegate?.dotfilesSyncItemsUpdated()
-        }.catch { [weak self] error in
-            self?.delegate?.dotfilesSyncError(error)
+        promise.catch {
+            self.delegate?.dotfilesSyncError($0)
+        }.finally {
+            self.delegate?.dotfilesSyncItemsUpdated()
         }
     }
 

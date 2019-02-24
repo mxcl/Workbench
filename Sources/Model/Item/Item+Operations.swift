@@ -6,6 +6,8 @@ import Dispatch
 import Bakeware
 import Path
 
+import AppKit
+
 public extension Item {
     /// returns a new promise that is intended for user-communication only
     private func reflect() -> Promise<Void> {
@@ -43,17 +45,39 @@ public extension Item {
 
     func upload() -> Promise<Void>? {
         dispatchPrecondition(condition: .onQueue(.main))
-        
+
+        func save() -> Promise<Void> {
+            let p = db.save(self.record)
+        #if DEBUG
+            return p.done {
+                assert($0 === self.record)
+            }
+        #else
+            return p.asVoid()
+        #endif
+        }
+
         func go() -> Promise<Void> {
             return DispatchQueue.global().async(.promise) {
                 { ($0, $0.md5) }(try Data(contentsOf: self.path))
+            }.get { data, md5 in
+                if (self.record[.checksum] as? String) == md5 {
+                    let alert = NSAlert()
+                    alert.informativeText = "NO DIFF"
+                    alert.addButton(withTitle: "OK")
+                    alert.runModal()
+                }
             }.done { data, md5 in
                 self.record[.data] = data as CKRecordValue
                 self.record[.checksum] = md5 as CKRecordValue
             }.then {
-                db.save(self.record).done {
-                    assert($0 === self.record)
-                }
+                save()
+            }.recover { error -> Promise<Void> in
+
+                // for CloudKit time-outs or no Internet, keep trying
+
+                guard error.shouldRetry else { throw error }
+                return after(.seconds(2)).then(go)
             }
         }
 
@@ -127,6 +151,17 @@ public extension Item {
             return db.delete(withRecordID: record.recordID).asVoid()
         case .networking:
             return nil
+        }
+    }
+}
+
+private extension Error {
+    var shouldRetry: Bool {
+        switch self {
+        case CKError.networkUnavailable, CKError.networkFailure:
+            return true
+        default:
+            return false
         }
     }
 }
