@@ -1,6 +1,8 @@
 import Dependencies
 import Foundation
+import Bakeware
 import CloudKit
+import Item
 
 extension Sync {
     public static let defaults = [
@@ -54,33 +56,10 @@ extension Sync {
     }
 
     private func add(validatedUrl: URL, relativePath: String) -> Promise<Item> {
-
-        var item: Item!
-
-        func save(_ record: CKRecord) -> Promise<Item> {
-            let promise1 = db.save(record)
-            item = Item(record: record, status: .networking(promise1.asVoid()))
-            let promise2 = DispatchQueue.main.async(.promise) {
-                self.items.append(item)
-            }
-            return when(fulfilled: promise1, promise2).map(on: nil){ _ in item }
-        }
-
-        return DispatchQueue.global().async(.promise) {
-            let record = CKRecord(recordType: .recordType, recordID: CKRecord.ID(recordName: relativePath))
-            let data = try Data(contentsOf: validatedUrl)
-            record[.data] = data as CKRecordValue
-            record[.checksum] = data.md5 as CKRecordValue
-            return record
-        }.then {
-            save($0)
-        }.tap(on: .main) { result in
-            switch result {
-            case .fulfilled:
-                item.status = .init(record: item.record)
-            case .rejected(let error):
-                item.status = .error(error)
-            }
+        return firstly {
+            Promise(validatedUrl: validatedUrl, relativePath: relativePath)
+        }.get { newItem in
+            self.items.append(newItem)
             self.delegate?.dotfilesSyncItemsUpdated()
         }
     }

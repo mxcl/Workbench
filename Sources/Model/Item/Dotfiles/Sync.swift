@@ -3,6 +3,7 @@ import PromiseKit
 import CloudKit
 import Bakeware
 import Path
+import Item
 
 public protocol SyncDelegate: class {
     func dotfilesSyncItemsUpdated()
@@ -10,9 +11,9 @@ public protocol SyncDelegate: class {
 }
 
 public class Sync {
-    let watcher = FSWatcher()
-    var operations: [Item: Promise<Void>] = [:]
     public weak var delegate: SyncDelegate?
+
+    private let watcher = FSWatcher()
     private var model: Promise<Model>
 
     public init() {
@@ -54,27 +55,45 @@ public class Sync {
         }
     }
 
+    private func announce(_ promise: Promise<Void>) {
+        delegate?.dotfilesSyncItemsUpdated()
+
+        promise.done { [weak self] in
+            self?.delegate?.dotfilesSyncItemsUpdated()
+        }.catch { [weak self] error in
+            self?.delegate?.dotfilesSyncError(error)
+        }
+    }
+
     public func resolveConflictByUploading(index: Int) {
         guard index >= 0, index < items.count else { return }
-        let item = items[index]
-        switch item.status {
-        case .synced:
-            break
-        case .error:
-            upload(item: item, overwrite: true)
-        case .networking:
-            break
+
+        if let promise = items[index].replace() {
+            announce(promise)
         }
     }
 
     public func resolveConflictByDownloading(index: Int) {
         guard index >= 0, index < items.count else { return }
-        //TODO
+
+        if let promise = items[index].download() {
+            announce(promise)
+        }
     }
 
     public func stopSyncing(index: Int) {
         guard index >= 0, index < items.count else { return }
-        stopSyncing(item: items[index])
+
+        let item = items[index]
+
+        if let promise = item.delete() {
+            items.removeObject(at: index)
+            announce(promise)
+        }
+
+        //TODO need an operations manager that knows if we are deleting
+        // so it stops responding to fsWatcher events while the delete
+        // removes on success but resumes normal behavior on failure of some kind
     }
 }
 
@@ -86,14 +105,10 @@ extension Sync: FSWatcherDelegate {
                 //TODO Sentry
                 continue
             }
-
-            if case .error = item.status {
-                return
+            item.upload()?.recover{ _ in }.done { [weak self] in
+                self?.delegate?.dotfilesSyncItemsUpdated()
             }
-
-            upload(item: item, overwrite: false)
         }
-
         delegate?.dotfilesSyncItemsUpdated()
     }
 }

@@ -56,3 +56,20 @@ public extension Sequence {
         }
     }
 }
+
+import CloudKit
+
+public var db: CKDatabase {
+    @inline(__always)
+    get { return CKContainer.default().privateCloudDatabase }
+}
+
+public struct StateMachineError: Error {
+    let line: UInt
+    let file: StaticString
+
+    public init(file: StaticString = #file, line: UInt = #line) {
+        self.file = file
+        self.line = line
+    }
+}

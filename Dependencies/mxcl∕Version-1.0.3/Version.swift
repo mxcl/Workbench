@@ -33,6 +33,7 @@ public struct Version: Hashable {
 
     /**
      Create a version object.
+     - Note: Integers are made absolute since negative integers are not allowed, yet it is conventional Swift to take `Int` over `UInt` where possible.
      - Remark: This initializer variant provided for more readable code when initializing with static integers.
      */
     @inlinable
@@ -51,25 +52,12 @@ public struct Version: Hashable {
 
     /**
      Creates a version object.
+     - Note: Integers are made absolute since negative integers are not allowed, yet it is conventional Swift to take `Int` over `UInt` where possible.
      - Remark: This initializer variant provided when it would be more readable than the nameless variant.
      */
     @inlinable
     public init(major: Int, minor: Int, patch: Int, prereleaseIdentifiers: [String] = [], buildMetadataIdentifiers: [String] = []) {
         self.init(major, minor, patch, prereleaseIdentifiers: prereleaseIdentifiers, buildMetadataIdentifiers: buildMetadataIdentifiers)
-    }
-
-    /**
-     Creates a version object.
-     - Remark: This initializer variant uses a more tolerant parser, eg. `10.1` parses to `Version(10,1,0)`
-     */
-    public init?(tolerant: String) {
-        if let major = Int(tolerant) {
-            self.init(major, 0, 0)
-        } else if let pair = Double(tolerant) {
-            self.init("\(pair).0")
-        } else {
-            self.init(tolerant)
-        }
     }
 
     /// Represents `0.0.0`
@@ -90,7 +78,7 @@ extension Version: LosslessStringConvertible {
         let requiredCharacters = string.prefix(upTo: requiredEndIndex)
         let requiredComponents = requiredCharacters
             .split(separator: ".", maxSplits: 2, omittingEmptySubsequences: false)
-            .map(String.init).compactMap({ Int($0) }).filter({ $0 >= 0 })
+            .compactMap{ Int($0) }
 
         guard requiredComponents.count == 3 else { return nil }
 
@@ -122,5 +110,48 @@ extension Version: LosslessStringConvertible {
             base += "+" + buildMetadataIdentifiers.joined(separator: ".")
         }
         return base
+    }
+}
+
+public extension Version {
+    /**
+     Creates a version object.
+     - Remark: This initializer variant uses a more tolerant parser, eg. `10.1` parses to `Version(10,1,0)`.
+     - Remark: This initializer will not recognizer builds-metadata-identifiers.
+     - Remark: Tolerates an initial `v` character.
+     */
+    init?(tolerant: String) {
+        let string: Substring
+        if tolerant.first == "v" {
+            string = tolerant.dropFirst()
+        } else {
+            string = Substring(tolerant)
+        }
+
+        let prereleaseStartIndex = string.firstIndex(of: "-")
+        let requiredEndIndex = prereleaseStartIndex ?? string.endIndex
+        let requiredCharacters = string.prefix(upTo: requiredEndIndex)
+        let maybes = requiredCharacters.split(separator: ".", maxSplits: 2, omittingEmptySubsequences: false).map{ Int($0) }
+
+        guard !maybes.contains(nil), 1...3 ~= maybes.count else {
+            return nil
+        }
+
+        var requiredComponents = maybes.map{ $0! }
+        while requiredComponents.count < 3 {
+            requiredComponents.append(0)
+        }
+
+        major = requiredComponents[0]
+        minor = requiredComponents[1]
+        patch = requiredComponents[2]
+
+        if let prereleaseStartIndex = prereleaseStartIndex {
+            let identifiers = string[string.index(after: prereleaseStartIndex)..<string.endIndex]
+            prereleaseIdentifiers = identifiers.split(separator: ".").map(String.init)
+        } else {
+            prereleaseIdentifiers = []
+        }
+        buildMetadataIdentifiers = []
     }
 }

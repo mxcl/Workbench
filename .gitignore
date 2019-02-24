@@ -1,3 +1,4 @@
 /.cake/swift-pm
 /.cake/Package.swift
 /.cake/*.json
+/Detritus/Version.xcconfig

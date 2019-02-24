@@ -16,5 +16,7 @@ class DotfilesViewController: NSViewController {
     override func viewWillAppear() {
         // otherwise relative times are wrong
         tableView.reloadData()
+        // otherwise upload/download buttons may be visible but shouldn’t
+        tableView.delegate?.tableViewSelectionDidChange?(Notification(name: .CKAccountChanged, object: tableView, userInfo: nil))
     }
 }

@@ -11,7 +11,7 @@ enum E: Error {
 
 public class Item {
     var md5: String { return record[.checksum] as! String }
-    let record: CKRecord
+    var record: CKRecord
     public var relativePath: String { return record.recordID.recordName }
     public var path: Path { return Path.home/relativePath }
 
@@ -52,7 +52,7 @@ public class Item {
         case .synced:
             return "✅ \((record.modificationDate ?? record.creationDate)?.ago ?? "")"
         case .error(let error):
-            return "❌ \(error.legibleLocalizedDescription)"
+            return "❌ \(error.legibleDescription)"
         case .networking:
             return "🔃 Networking…"
         }
@@ -74,5 +74,41 @@ extension Item: Comparable {
 extension Item: Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(relativePath)
+    }
+}
+
+extension String {
+    static let recordType = "dotfile"
+    static let data = "data"
+    static let checksum = "md5"
+}
+
+public extension Promise where T == [Item] {
+    convenience init() {
+        self.init(resolver: { seal in
+            let query = CKQuery(recordType: .recordType, predicate: NSPredicate(value: true))
+            db.perform(query).mapValues(Item.init).pipe(to: seal.resolve)
+        })
+    }
+}
+
+public extension Promise where T == Item {
+    convenience init(validatedUrl: URL, relativePath: String) {
+
+        //TODO sucks, add item immediately to tableView in networking state
+
+        assert(Path(url: validatedUrl)?.relative(to: Path.home) == relativePath)
+
+        self.init { seal in
+            DispatchQueue.global().async(.promise) {
+                let record = CKRecord(recordType: .recordType, recordID: CKRecord.ID(recordName: relativePath))
+                let data = try Data(contentsOf: validatedUrl)
+                record[.data] = data as CKRecordValue
+                record[.checksum] = data.md5 as CKRecordValue
+                return record
+            }.then(db.save).map {
+                Item(record: $0, status: .synced)
+            }.pipe(to: seal.resolve)
+        }
     }
 }

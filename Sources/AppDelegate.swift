@@ -41,7 +41,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 extension AppDelegate: Dotfiles.SyncDelegate {
     func dotfilesSyncItemsUpdated() {
-        dotfilesViewController?.tableView.reloadData()
+        if let tableView = dotfilesViewController?.tableView {
+            tableView.reloadData()
+            tableViewSelectionDidChange(Notification(name: .CKAccountChanged, object: tableView, userInfo: nil))
+        }
         updateStatusBarIcon()
     }
 
