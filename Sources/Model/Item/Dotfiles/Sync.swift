@@ -14,15 +14,19 @@ public class Sync {
     public weak var delegate: SyncDelegate?
 
     private let watcher = FSWatcher()
-    private var model: Promise<Model>
+    private var model: Promise<OrderedSet<Item>>
 
     public init() {
-        model = Promise()
+        model = firstly {
+            Promise<[Item]>()
+        }.map {
+            OrderedSet(sequence: $0)
+        }
         watcher.delegate = self
 
         model.done { [weak self] in
             guard let `self` = self else { return }
-            self.watcher.observe = Set($0.items.map(\.path))
+            self.watcher.observe = Set($0.map(\.path))
             self.delegate?.dotfilesSyncItemsUpdated()
         }.catch { [weak self] error in
             self?.delegate?.dotfilesSyncError(error)
@@ -30,7 +34,7 @@ public class Sync {
     }
 
     public var items: OrderedSet<Item> {
-        return model.value?.items ?? OrderedSet()
+        return model.value ?? OrderedSet()
     }
 
     public enum State {
@@ -44,7 +48,7 @@ public class Sync {
         case .none:
             return .loading(model.asVoid())
         case .some(.fulfilled(let model)):
-            for item in model.items {
+            for item in model {
                 if case .error(let error) = item.status {
                     return .error(error)
                 }

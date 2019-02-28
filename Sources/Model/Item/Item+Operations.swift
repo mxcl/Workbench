@@ -6,8 +6,6 @@ import Dispatch
 import Bakeware
 import Path
 
-import AppKit
-
 public extension Item {
     /// returns a new promise that is intended for user-communication only
     private func reflect() -> Promise<Void> {
@@ -15,24 +13,23 @@ public extension Item {
             return Promise(error: StateMachineError())
         }
 
-        return promise.done {
-            // see if we’re done or not
-            guard case .networking(let ongoingPromise) = self.status else { return }
-
-            guard ongoingPromise === promise else {
-                // we are no longer the last promise in the chain, forget about
-                // this promise, it is now irrelevant
+        return promise.done(on: .main) {
+            guard case .networking(let ongoingPromise) = self.status, ongoingPromise === promise else {
+                // new networking operations occurred in the meantime
+                // this promise is now irrelevant
                 throw PMKError.cancelled
             }
+            self.status = .init(record: self.record)
 
-            switch promise.result {
-            case .none:
-                throw StateMachineError()
-
-            case .fulfilled?:
-                self.status = .init(record: self.record)
-
-            case .rejected(let error)?:
+        }.recover(on: .main, policy: .allErrors) { error in
+            guard case .networking(let ongoingPromise) = self.status, ongoingPromise === promise else {
+                // new networking operations occurred in the meantime
+                // this promise is now irrelevant
+                throw PMKError.cancelled
+            }
+            if error.isCancelled {
+                self.status = .init(record: self.record)  // might be “conflict” state
+            } else {
                 self.status = .error(error)
                 throw error
             }
@@ -46,26 +43,24 @@ public extension Item {
     func upload() -> Promise<Void>? {
         dispatchPrecondition(condition: .onQueue(.main))
 
+    #if DEBUG
         func save() -> Promise<Void> {
-            let p = db.save(self.record)
-        #if DEBUG
-            return p.done {
+            return db.save(self.record).done {
                 assert($0 === self.record)
             }
-        #else
-            return p.asVoid()
-        #endif
         }
+    #else
+        let save = { db.save(self.record).asVoid() }
+    #endif
 
         func go() -> Promise<Void> {
+            var retries = 0
+
             return DispatchQueue.global().async(.promise) {
                 { ($0, $0.md5) }(try Data(contentsOf: self.path))
             }.get { data, md5 in
                 if (self.record[.checksum] as? String) == md5 {
-                    let alert = NSAlert()
-                    alert.informativeText = "NO DIFF"
-                    alert.addButton(withTitle: "OK")
-                    alert.runModal()
+                    throw PMKError.cancelled
                 }
             }.done { data, md5 in
                 self.record[.data] = data as CKRecordValue
@@ -76,8 +71,21 @@ public extension Item {
 
                 // for CloudKit time-outs or no Internet, keep trying
 
-                guard error.shouldRetry else { throw error }
-                return after(.seconds(2)).then(go)
+                guard error.shouldRetry else {
+                    throw error
+                }
+                return after(.seconds(2)).done {
+                    retries += 1
+                    guard retries < 3 else { throw error }
+                }.then(go)
+            }
+        }
+
+        func recover(error: Error) throws -> Promise<Void> {
+            if error.isCancelled || error.shouldRetry {
+                return Promise()
+            } else {
+                throw error
             }
         }
 
@@ -86,7 +94,7 @@ public extension Item {
             print("warning: will not upload while in error state")
             return nil
         case .networking(let promise):
-            status = .networking(promise.then(go))
+            status = .networking(promise.recover(recover).then(go))
         case .synced:
             status = .networking(go())
         }
