@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
+		27CCC44DFA86333E66FEE34EA8063784 /* Versionator */ = {
+			isa = PBXAggregateTarget;
+			buildPhases = (
+				B0CCAA5D1D192F6963E1F5560239A386 /* Determine Version */,
+			);
+			dependencies = (
+			);
+			name = Versionator;
+		};
 		818A4854C95B333066E8C4A9D0FE3104 /* Cakefile */ = {
 			isa = PBXAggregateTarget;
 			buildConfigurationList = FB1419C517BF03EBE4B57BA190D11DA2 /* Build configuration list for PBXAggregateTarget "Cakefile" */;
@@ -238,6 +247,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 9CF1FA8024CC8159DE776A7595DC3523;
 			remoteInfo = "Deps·Version";
+		};
+		F312C1044F70834D556FB7F4802D1893 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DAA9F9B983CE55D38B2F125BAD56FC0E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 27CCC44DFA86333E66FEE34EA8063784;
+			remoteInfo = Versionator;
 		};
 		FC06ED7DAB16B02502FC9309C805AAA3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -617,6 +633,7 @@
 			);
 			dependencies = (
 				CB56305824BFCA6B67740F6043A4B9E2 /* PBXTargetDependency */,
+				3366830391752771A1D8AFE2C77B8DC4 /* PBXTargetDependency */,
 				6F2865C025F7F740FF65DBD4991157C8 /* PBXTargetDependency */,
 			);
 			name = Cake;
@@ -842,6 +859,7 @@
 				48CCB2D48C44662AEAADE92F33F5B53F /* Batter·Item */,
 				A54CE7F62F35E2AB6B8CD4751BF034E0 /* Batter·Bakeware */,
 				F5D94DE7A2DF28D8FD6E0C310044455E /* Batter */,
+				27CCC44DFA86333E66FEE34EA8063784 /* Versionator */,
 				8B942976617019A6C464818315598CC1 /* Cake */,
 			);
 		};
@@ -864,6 +882,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /usr/bin/swift;
 			shellScript = "import func Darwin.fputs\nimport var Darwin.stderr\nimport ScriptingBridge\nimport AppKit\n\nfunc print(_ objs: Any...) {\n    let str = objs.reduce(into: \"\") { $0.append(\" \\($1)\") }\n    fputs(str, stderr)\n}\n\nlet apps = NSRunningApplication.runningApplications(withBundleIdentifier: \"dev.mxcl.Cake\")\n\nswitch apps.count {\ncase 0:\n    print(\"warning: Cake.app not running, Cakefile changes will not take effect\")\ncase 1:\n    guard let bundle = apps[0].bundleURL else {\n        print(\"Failed to obtain Cake.app location\")\n        exit(1)\n    }\n    guard let projectDir = ProcessInfo.processInfo.environment[\"PROJECT_DIR\"] else {\n        print(\"Failed to obtain PROJECT_DIR\")\n        exit(2)\n    }\n    let path = bundle.appendingPathComponent(\"Contents/MacOS/cake-build\").path\n    let task = Process()\n    task.launchPath = path\n    task.arguments = [String(apps[0].processIdentifier), projectDir]\n    try task.run()\n    task.waitUntilExit()\n    exit(task.terminationStatus)\ndefault:\n    print(\"error: More than one instance of Cake.app is running\")\n    exit(3)\n}\n";
+			showEnvVarsInLog = 0;
+		};
+		B0CCAA5D1D192F6963E1F5560239A386 /* Determine Version */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Determine Version";
+			outputPaths = (
+				Version.xcconfig,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "v=$(git describe --tags --always --abbrev=0)\nn=$(git rev-list HEAD --count)\n\necho \"CURRENT_PROJECT_VERSION = $n\" > Version.xcconfig\necho \"SEMANTIC_PROJECT_VERSION = $v\" >> Version.xcconfig\necho \"SEMANTIC_PROJECT_VERSION[config=Debug] = $v-debug\" >> Version.xcconfig\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1049,6 +1083,12 @@
 			name = Cakefile;
 			target = 818A4854C95B333066E8C4A9D0FE3104 /* Cakefile */;
 			targetProxy = A6534538102624A3BAD54587BBECFEF5 /* PBXContainerItemProxy */;
+		};
+		3366830391752771A1D8AFE2C77B8DC4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Versionator;
+			target = 27CCC44DFA86333E66FEE34EA8063784 /* Versionator */;
+			targetProxy = F312C1044F70834D556FB7F4802D1893 /* PBXContainerItemProxy */;
 		};
 		3A19463D99686825EC39E9ED03F9589E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

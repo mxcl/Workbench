@@ -1,7 +1,7 @@
 import Cakefile
 
 dependencies = [
-    .cake(~>1.0),
+    .cake(~>Version(1,0,0, prereleaseIdentifiers: ["debug"])),
     .github("mxcl/PromiseKit" ~> 6.7),
     .github("Weebly/OrderedSet" ~> 3),
     .github("mxcl/LegibleError" ~> 1),

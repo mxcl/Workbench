@@ -4,7 +4,7 @@ Seamless, automatic, “dotfile” sync to iCloud.
 
 <img src="Documents/Screenshot.1.png" width="450">
 
-Workbench is an effective way to continously and securely back up your
+Workbench is an effective way to continuously and securely back up your
 “dotfiles” so they can be easily restored when you clean install macOS and sign
 back into your iCloud account.
 
@@ -22,7 +22,7 @@ work, I appreciate it 🙏🏻
 	<img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
 </a>
 
-[Other ways to say thanks](http://mxcl.github.io/#donate).
+[Other ways to say thanks](http://mxcl.dev/#donate).
 
 [`brew`]: https://brew.sh
 
@@ -60,7 +60,7 @@ If you want these caveats removed please donate to
 
 [Releases](../../releases).
 
-Our binaries automatically update.
+Our binaries are notarized, runtime‐hardened and update automatically.
 
 ## What’s with the name?
 

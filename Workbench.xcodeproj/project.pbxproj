@@ -6,22 +6,7 @@
 	objectVersion = 46;
 	objects = {
 
-/* Begin PBXAggregateTarget section */
-		630B923A222219BF00157D32 /* Versionator */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = 630B924E222219C000157D32 /* Build configuration list for PBXAggregateTarget "Versionator" */;
-			buildPhases = (
-				630B924F222219C400157D32 /* Determine Version */,
-			);
-			dependencies = (
-			);
-			name = Versionator;
-			productName = Versionator;
-		};
-/* End PBXAggregateTarget section */
-
 /* Begin PBXBuildFile section */
-		630B926022221A9C00157D32 /* Version.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 630B925F22221A9C00157D32 /* Version.xcconfig */; };
 		63254B9721BB7A0F001B65CD /* Cake.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 63254B9021BB79B5001B65CD /* Cake.a */; };
 		6349D47D22160B40006C73D0 /* bridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 6349D47C22160B40006C73D0 /* bridge.m */; };
 		6349D4A322166606006C73D0 /* AppDelegate+add().swift in Sources */ = {isa = PBXBuildFile; fileRef = 6349D4A222166606006C73D0 /* AppDelegate+add().swift */; };
@@ -30,6 +15,7 @@
 		63C6E2D92215DF3D0073C1CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63C6E2CD2215DF3D0073C1CB /* Assets.xcassets */; };
 		63C6E2DB2215E07F0073C1CB /* AppDelegate+StatusItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C6E2DA2215E07F0073C1CB /* AppDelegate+StatusItem.swift */; };
 		63C6E2DD2215E1BC0073C1CB /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C6E2DC2215E1BC0073C1CB /* RootViewController.swift */; };
+		63C91556222835E3006492A3 /* Cake.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 63C91545222835E3006492A3 /* Cake.xcconfig */; };
 		63F5920121979233002ABD2E /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63F5920021979233002ABD2E /* CloudKit.framework */; };
 		63F592252198E87A002ABD2E /* AppDelegate+LoginItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F592242198E87A002ABD2E /* AppDelegate+LoginItem.swift */; };
 		OBJ_21 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* AppDelegate.swift */; };
@@ -43,13 +29,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 47475113D0EED3F21B4AEDB1DDBA111F;
 			remoteInfo = "Batter·Item";
-		};
-		630B925D22221A2800157D32 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = OBJ_1 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 630B923A222219BF00157D32;
-			remoteInfo = Versionator;
 		};
 		6321A778220F5A3000916844 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -159,7 +138,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		630B925F22221A9C00157D32 /* Version.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Version.xcconfig; sourceTree = "<group>"; };
 		6349D47B221607E0006C73D0 /* bridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bridge.h; sourceTree = "<group>"; };
 		6349D47C22160B40006C73D0 /* bridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = bridge.m; sourceTree = "<group>"; };
 		6349D4A222166606006C73D0 /* AppDelegate+add().swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+add().swift"; sourceTree = "<group>"; };
@@ -168,6 +146,7 @@
 		63C6E2CD2215DF3D0073C1CB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		63C6E2DA2215E07F0073C1CB /* AppDelegate+StatusItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+StatusItem.swift"; sourceTree = "<group>"; };
 		63C6E2DC2215E1BC0073C1CB /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
+		63C91545222835E3006492A3 /* Cake.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Cake.xcconfig; path = ../.cake/Cake.xcconfig; sourceTree = "<group>"; };
 		63F591FE2197922B002ABD2E /* Workbench.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Workbench.entitlements; sourceTree = "<group>"; };
 		63F5920021979233002ABD2E /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		63F592242198E87A002ABD2E /* AppDelegate+LoginItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AppDelegate+LoginItem.swift"; sourceTree = "<group>"; };
@@ -211,11 +190,11 @@
 		OBJ_12 /* Detritus */ = {
 			isa = PBXGroup;
 			children = (
+				63C91545222835E3006492A3 /* Cake.xcconfig */,
 				OBJ_14 /* Main.storyboard */,
 				63C6E2CD2215DF3D0073C1CB /* Assets.xcassets */,
 				63F591FE2197922B002ABD2E /* Workbench.entitlements */,
 				OBJ_13 /* App-Info.plist */,
-				630B925F22221A9C00157D32 /* Version.xcconfig */,
 			);
 			path = Detritus;
 			sourceTree = SOURCE_ROOT;
@@ -284,7 +263,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				630B925E22221A2800157D32 /* PBXTargetDependency */,
 				63254B9621BB7A0A001B65CD /* PBXTargetDependency */,
 			);
 			name = Workbench;
@@ -301,11 +279,6 @@
 				LastSwiftMigration = 9999;
 				LastUpgradeCheck = 1020;
 				TargetAttributes = {
-					630B923A222219BF00157D32 = {
-						CreatedOnToolsVersion = 10.2;
-						DevelopmentTeam = TEQMQBRC7B;
-						ProvisioningStyle = Automatic;
-					};
 					"Pound Cake" = {
 						DevelopmentTeam = TEQMQBRC7B;
 						ProvisioningStyle = Automatic;
@@ -343,7 +316,6 @@
 			projectRoot = "";
 			targets = (
 				"Pound Cake" /* Workbench */,
-				630B923A222219BF00157D32 /* Versionator */,
 			);
 		};
 /* End PBXProject section */
@@ -476,37 +448,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
+				63C91556222835E3006492A3 /* Cake.xcconfig in Resources */,
 				63C6E2D92215DF3D0073C1CB /* Assets.xcassets in Resources */,
 				OBJ_23 /* Main.storyboard in Resources */,
-				630B926022221A9C00157D32 /* Version.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		630B924F222219C400157D32 /* Determine Version */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/.git/refs/tags",
-			);
-			name = "Determine Version";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(SRCROOT)/Detritus/Version.xcconfig",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "v=$(git describe --tags --always --abbrev=0)\nn=$(git rev-list HEAD --count)\n\necho \"CURRENT_PROJECT_VERSION=$n\" > Detritus/Version.xcconfig\necho \"SEMANTIC_PROJECT_VERSION=$v\" >> Detritus/Version.xcconfig\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		OBJ_20 /* Sources */ = {
@@ -527,11 +475,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		630B925E22221A2800157D32 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 630B923A222219BF00157D32 /* Versionator */;
-			targetProxy = 630B925D22221A2800157D32 /* PBXContainerItemProxy */;
-		};
 		63254B9621BB7A0A001B65CD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = Cake;
@@ -540,27 +483,8 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		630B923B222219C000157D32 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = TEQMQBRC7B;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		630B923C222219C000157D32 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = TEQMQBRC7B;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 		OBJ_18 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 630B925F22221A9C00157D32 /* Version.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -583,7 +507,6 @@
 		};
 		OBJ_19 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 630B925F22221A9C00157D32 /* Version.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -607,6 +530,7 @@
 		};
 		OBJ_3 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 63C91545222835E3006492A3 /* Cake.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
@@ -654,6 +578,7 @@
 		};
 		OBJ_4 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 63C91545222835E3006492A3 /* Cake.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
@@ -699,15 +624,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		630B924E222219C000157D32 /* Build configuration list for PBXAggregateTarget "Versionator" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				630B923B222219C000157D32 /* Debug */,
-				630B923C222219C000157D32 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		OBJ_17 /* Build configuration list for PBXNativeTarget "Workbench" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
