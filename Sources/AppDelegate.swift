@@ -63,7 +63,7 @@ extension AppDelegate: Dotfiles.SyncDelegate {
         default:
             let note = NSUserNotification()
             note.title = error.title
-            note.informativeText = error.legibleDescription
+            note.informativeText = error.legibleLocalizedDescription
             NSUserNotificationCenter.default.deliver(note)
         }
     }
