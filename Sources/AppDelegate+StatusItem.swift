@@ -31,11 +31,9 @@ extension AppDelegate {
             button.appearsDisabled = true
         case .ready:
             button.image = .wrench
-            button.alternateImage = nil
             button.appearsDisabled = false
         case .error:
             button.image = NSImage.wrench?.image(withTintColor: .red)
-            button.alternateImage = NSImage.wrench?.image(withTintColor: .white)
             button.appearsDisabled = false
         }
     }
@@ -74,7 +72,7 @@ private extension NSImage {
     }
 }
 
-extension NSImage {
+private extension NSImage {
     func image(withTintColor tintColor: NSColor) -> NSImage {
         if !isTemplate {
             return self

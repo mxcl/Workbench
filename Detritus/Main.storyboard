@@ -784,7 +784,7 @@
         <!--Tab View Controller-->
         <scene sceneID="e1K-YM-jLH">
             <objects>
-                <tabViewController selectedTabViewItemIndex="0" id="tqR-ap-NaC" sceneMemberID="viewController">
+                <tabViewController selectedTabViewItemIndex="0" id="tqR-ap-NaC" customClass="TabViewController" customModule="Workbench" customModuleProvider="target" sceneMemberID="viewController">
                     <tabViewItems>
                         <tabViewItem id="waG-J0-zsZ"/>
                         <tabViewItem id="67i-p6-VDI"/>
@@ -799,6 +799,8 @@
                         </connections>
                     </tabView>
                     <connections>
+                        <outlet property="brewTabViewItem" destination="67i-p6-VDI" id="J4E-ua-teM"/>
+                        <outlet property="dotfilesTabViewItem" destination="waG-J0-zsZ" id="3dE-9f-WeO"/>
                         <outlet property="tabView" destination="pdx-Pn-lBA" id="u7f-oA-bro"/>
                         <segue destination="XfG-lQ-9wD" kind="relationship" relationship="tabItems" id="Aat-tv-kAC"/>
                         <segue destination="781-Qs-hqT" kind="relationship" relationship="tabItems" id="LER-95-tZS"/>

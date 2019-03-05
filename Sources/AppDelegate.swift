@@ -15,6 +15,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return popover.contentViewController as? RootViewController
     }
 
+    var tabViewController: TabViewController? {
+        return rootViewController?.tabViewController
+    }
+
     var dotfilesViewController: DotfilesViewController? {
         return rootViewController?.children.first as? DotfilesViewController
     }
@@ -125,4 +129,10 @@ private extension Bundle {
 
 var NSAppDelegate: AppDelegate {
     return NSApp.delegate as! AppDelegate
+}
+
+extension AppDelegate: BrewModelDelegate {
+    func brewItemsUpdated() {
+        tabViewController?.updateStatusString()
+    }
 }

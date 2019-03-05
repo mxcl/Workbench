@@ -11,19 +11,21 @@ class RootViewController: NSViewController {
 
     func hideTabs() {
         noTabs = true
-        (children.first as? NSTabViewController)?.hideTabs()
+        tabViewController?.hideTabs()
+    }
+
+    var tabViewController: TabViewController? {
+        return children.first as? TabViewController
     }
 
     override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
         if noTabs {
             // `.unspecified` style means they go away
-            (segue.destinationController as? NSTabViewController)?.hideTabs()
+            (segue.destinationController as? TabViewController)?.hideTabs()
         }
     }
 
     override func viewDidLoad() {
-        versionLabel.stringValue = "Workbench \(Bundle.main.version)"
-
         // fixes text not being visible in popover
         // https://github.com/mxcl/Workbench/issues/24
         // https://stackoverflow.com/questions/29074724
@@ -65,9 +67,39 @@ class RootViewController: NSViewController {
     }
 }
 
-private extension NSTabViewController {
-    func hideTabs() {
+class TabViewController: NSTabViewController {
+    @IBOutlet var dotfilesTabViewItem: NSTabViewItem!
+    @IBOutlet var brewTabViewItem: NSTabViewItem!
+
+    fileprivate func hideTabs() {
         tabStyle = .unspecified
         selectedTabViewItemIndex = 0
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        updateStatusString()
+    }
+
+    override func tabView(_ tabView: NSTabView, didSelect item: NSTabViewItem?) {
+
+        super.tabView(tabView, didSelect: item)
+
+        let string: String
+        switch item {
+        case brewTabViewItem:
+            let mtime = NSAppDelegate.brewModel.mtime
+            let utime = NSAppDelegate.brewModel.utime
+            string = "Last updated: \(ago: mtime), last checked: \(ago: utime)"
+        default:
+            string = "Workbench \(Bundle.main.version)"
+        }
+
+        NSAppDelegate.rootViewController?.versionLabel.stringValue = string
+    }
+
+    func updateStatusString() {
+        tabView(tabView, didSelect: tabView.selectedTabViewItem)
     }
 }

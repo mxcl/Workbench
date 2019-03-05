@@ -21,11 +21,11 @@ public extension Date {
             // allow a minute of variance
             // anything more means the user’s system time is *really* wrong and
             // we *should* tell them about it!
-            return "The future"
+            return "the future"
         }
         let ti = abs(timeIntervalSinceNow)
 
-        if ti < 120 { return "Just now" }
+        if ti < 120 { return "just now" }
         if ti < 2*60*60 { return "\(lrint(ti / 60)) minutes" }
         if ti < 2*24*60*60 { return "\(lrint(ti / (60*60))) hours" }
         if ti < 14*24*60*60 { return "\(lrint(ti / (24*60*60))) days" }
@@ -34,11 +34,17 @@ public extension Date {
     }
 }
 
+public extension String.StringInterpolation {
+    mutating func appendInterpolation(ago date: Date?) {
+        appendLiteral(date.ago)
+    }
+}
+
 public extension Optional where Wrapped == Date {
     var ago: String {
         switch self {
         case .none:
-            return "Never"
+            return "never"
         case .some(let date):
             return date.ago
         }

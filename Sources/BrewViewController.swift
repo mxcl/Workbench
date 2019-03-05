@@ -12,6 +12,7 @@ class BrewViewController: NSViewController {
     override func viewWillAppear() {
         // otherwise relative times are wrong
         tableView.reloadData()
+        NSAppDelegate.updateStatusBarIcon()
     }
 }
 
@@ -31,7 +32,7 @@ extension BrewViewController: NSTableViewDataSource {
             if let outdated = item.outdated {
                 return "↙ \(outdated)"
             } else {
-                return "✅ \(item.mtime.ago)"
+                return "✅ \(ago: item.mtime)"
             }
         }
     }

@@ -50,7 +50,7 @@ public class Item {
     public var statusString: String {
         switch status {
         case .synced:
-            return "✅ \((record.modificationDate ?? record.creationDate)?.ago ?? "")"
+            return "✅ \(ago: record.modificationDate ?? record.creationDate)"
         case .error(let error):
             return "❌ \(error.legibleDescription)"
         case .networking:
