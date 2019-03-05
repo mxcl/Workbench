@@ -23,6 +23,15 @@ class RootViewController: NSViewController {
 
     override func viewDidLoad() {
         versionLabel.stringValue = "Workbench \(Bundle.main.version)"
+
+        // fixes text not being visible in popover
+        // https://github.com/mxcl/Workbench/issues/24
+        // https://stackoverflow.com/questions/29074724
+        if #available(OSX 10.14, *), UserDefaults.standard.string(forKey: "AppleInterfaceStyle") == "Dark" {
+            view.appearance = NSAppearance(named: .darkAqua)
+        } else {
+            view.appearance = NSAppearance(named: .aqua)
+        }
     }
 
     @IBAction func onMiscClicked(_ sender: Any) {
