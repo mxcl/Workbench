@@ -12,6 +12,7 @@
 		6349D4A322166606006C73D0 /* AppDelegate+add().swift in Sources */ = {isa = PBXBuildFile; fileRef = 6349D4A222166606006C73D0 /* AppDelegate+add().swift */; };
 		63668A22220F72F500544B89 /* alert().swift in Sources */ = {isa = PBXBuildFile; fileRef = 63668A21220F72F500544B89 /* alert().swift */; };
 		637A44352217146C00C43788 /* DotfilesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637A44342217146C00C43788 /* DotfilesViewController.swift */; };
+		6384B380222E27440056E1D1 /* BrewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6384B37F222E27440056E1D1 /* BrewViewController.swift */; };
 		63C6E2D92215DF3D0073C1CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63C6E2CD2215DF3D0073C1CB /* Assets.xcassets */; };
 		63C6E2DB2215E07F0073C1CB /* AppDelegate+StatusItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C6E2DA2215E07F0073C1CB /* AppDelegate+StatusItem.swift */; };
 		63C6E2DD2215E1BC0073C1CB /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C6E2DC2215E1BC0073C1CB /* RootViewController.swift */; };
@@ -135,6 +136,13 @@
 			remoteGlobalIDString = 7144B2524C07C16FEA8389A2AF1252BA;
 			remoteInfo = "Deps·PMKCloudKit";
 		};
+		6384B37D222E27250056E1D1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FR_13B4EB0E99D7976B6EA3ED38ED5D9EDA /* Cake.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 453BCB7CF02E6872679E5C736F10BD82;
+			remoteInfo = "Batter·Brew";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -143,6 +151,7 @@
 		6349D4A222166606006C73D0 /* AppDelegate+add().swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+add().swift"; sourceTree = "<group>"; };
 		63668A21220F72F500544B89 /* alert().swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "alert().swift"; sourceTree = "<group>"; };
 		637A44342217146C00C43788 /* DotfilesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DotfilesViewController.swift; sourceTree = "<group>"; };
+		6384B37F222E27440056E1D1 /* BrewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewViewController.swift; sourceTree = "<group>"; };
 		63C6E2CD2215DF3D0073C1CB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		63C6E2DA2215E07F0073C1CB /* AppDelegate+StatusItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+StatusItem.swift"; sourceTree = "<group>"; };
 		63C6E2DC2215E1BC0073C1CB /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
@@ -203,7 +212,7 @@
 			isa = PBXGroup;
 			children = (
 				FR_6B7F1C231D14ABA6663362BCD356014E /* Model */,
-				OBJ_8 /* Sources */,
+				OBJ_8 /* App·Sources */,
 				OBJ_12 /* Detritus */,
 				FR_13B4EB0E99D7976B6EA3ED38ED5D9EDA /* Cake.xcodeproj */,
 				63F591FF21979233002ABD2E /* Frameworks */,
@@ -211,7 +220,7 @@
 			);
 			sourceTree = "<group>";
 		};
-		OBJ_8 /* Sources */ = {
+		OBJ_8 /* App·Sources */ = {
 			isa = PBXGroup;
 			children = (
 				OBJ_9 /* AppDelegate.swift */,
@@ -219,11 +228,13 @@
 				63F592242198E87A002ABD2E /* AppDelegate+LoginItem.swift */,
 				6349D4A222166606006C73D0 /* AppDelegate+add().swift */,
 				637A44342217146C00C43788 /* DotfilesViewController.swift */,
+				6384B37F222E27440056E1D1 /* BrewViewController.swift */,
 				63C6E2DC2215E1BC0073C1CB /* RootViewController.swift */,
 				63668A21220F72F500544B89 /* alert().swift */,
 				6349D47B221607E0006C73D0 /* bridge.h */,
 				6349D47C22160B40006C73D0 /* bridge.m */,
 			);
+			name = "App·Sources";
 			path = Sources;
 			sourceTree = "<group>";
 		};
@@ -242,6 +253,7 @@
 				6321A783220F5A3000916844 /* Dependencies.a */,
 				6321A785220F5A3000916844 /* Dotfiles.a */,
 				630B924D222219C000157D32 /* Item.a */,
+				6384B37E222E27250056E1D1 /* Brew.a */,
 				6321A787220F5A3000916844 /* Bakeware.a */,
 				63254B8C21BB79B5001B65CD /* Batter.a */,
 				63254B9021BB79B5001B65CD /* Cake.a */,
@@ -301,6 +313,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -441,6 +454,14 @@
 			remoteRef = 63668A19220F713F00544B89 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		6384B37E222E27250056E1D1 /* Brew.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			name = Brew.a;
+			path = libBrew.a;
+			remoteRef = 6384B37D222E27250056E1D1 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -462,6 +483,7 @@
 			buildActionMask = 0;
 			files = (
 				637A44352217146C00C43788 /* DotfilesViewController.swift in Sources */,
+				6384B380222E27440056E1D1 /* BrewViewController.swift in Sources */,
 				6349D4A322166606006C73D0 /* AppDelegate+add().swift in Sources */,
 				6349D47D22160B40006C73D0 /* bridge.m in Sources */,
 				OBJ_21 /* AppDelegate.swift in Sources */,

@@ -116,7 +116,7 @@ public class AppUpdater {
         let url = URL(string: "https://api.github.com/repos/\(slug)/releases")!
 
         active = firstly {
-            URLSession.shared.dataTask(.promise, with: url)
+            URLSession.shared.dataTask(.promise, with: url).validate()
         }.map {
             try JSONDecoder().decode([Release].self, from: $0.data)
         }.compactMap { releases in

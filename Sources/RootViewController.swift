@@ -7,6 +7,20 @@ class RootViewController: NSViewController {
     @IBOutlet var versionLabel: NSTextField!
     @IBOutlet var addButton: NSButton!
 
+    private var noTabs = false
+
+    func hideTabs() {
+        noTabs = true
+        (children.first as? NSTabViewController)?.hideTabs()
+    }
+
+    override func prepare(for segue: NSStoryboardSegue, sender: Any?) {
+        if noTabs {
+            // `.unspecified` style means they go away
+            (segue.destinationController as? NSTabViewController)?.hideTabs()
+        }
+    }
+
     override func viewDidLoad() {
         versionLabel.stringValue = "Workbench \(Bundle.main.version)"
     }
@@ -38,6 +52,13 @@ class RootViewController: NSViewController {
 
     private func closeWindow() {
         //TODO less coupling
-        (NSApp.delegate as? AppDelegate)?.close()
+        NSAppDelegate.close()
+    }
+}
+
+private extension NSTabViewController {
+    func hideTabs() {
+        tabStyle = .unspecified
+        selectedTabViewItemIndex = 0
     }
 }

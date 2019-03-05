@@ -34,6 +34,17 @@ public extension Date {
     }
 }
 
+public extension Optional where Wrapped == Date {
+    var ago: String {
+        switch self {
+        case .none:
+            return "Never"
+        case .some(let date):
+            return date.ago
+        }
+    }
+}
+
 public extension Sequence {
     @inlinable
     func map<T>(_ keyPath: KeyPath<Element, T>) -> [T] {
@@ -57,6 +68,13 @@ public extension Sequence {
     }
 }
 
+public extension Collection {
+    subscript (safe index: Index) -> Element? {
+        return indices.contains(index) ? self[index] : nil
+    }
+}
+
+
 import CloudKit
 
 public var db: CKDatabase {
@@ -71,5 +89,29 @@ public struct StateMachineError: Error {
     public init(file: StaticString = #file, line: UInt = #line) {
         self.file = file
         self.line = line
+    }
+}
+
+
+import LegibleError
+import PromiseKit
+
+public extension Promise {
+    @discardableResult
+    func log() -> PMKFinalizer {
+        return self.catch {
+            print("error:", $0.legibleDescription)
+        }
+    }
+}
+
+public extension PromiseKit.Result {
+    var value: T? {
+        switch self {
+        case .fulfilled(let tee):
+            return tee
+        case .rejected:
+            return nil
+        }
     }
 }

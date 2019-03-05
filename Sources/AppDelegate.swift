@@ -4,6 +4,7 @@ import Cake
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
     let model = Dotfiles.Sync()
+    let brewModel = BrewModel()
     let popover = NSPopover()
     let statusItem = NSStatusBar.system.statusItem(withLength: 24)
     var eventMonitor: Any?
@@ -26,6 +27,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let storyboard = NSStoryboard(name: .init("Main"), bundle: nil)
         let identifier = NSStoryboard.SceneIdentifier("RootTabViewController")
         popover.contentViewController = storyboard.instantiateController(withIdentifier: identifier) as? NSViewController
+
+        brewModel.promise.catch { [ weak self] in
+            if case Brew.E.noBrew = $0 {
+                self?.rootViewController?.hideTabs()
+            }
+        }
     }
 
     @objc func checkForUpdates() {
@@ -71,20 +78,6 @@ extension AppDelegate: Dotfiles.SyncDelegate {
     }
 }
 
-extension AppDelegate: NSTableViewDataSource {
-    func numberOfRows(in tableView: NSTableView) -> Int {
-        return model.items.count
-    }
-
-    func tableView(_ tableView: NSTableView, objectValueFor column: NSTableColumn?, row: Int) -> Any? {
-        if column == dotfilesViewController?.filenameColumn {
-            return model.items[row].relativePath
-        } else {
-            return model.items[row].statusString
-        }
-    }
-}
-
 extension AppDelegate: NSTableViewDelegate {
     func tableViewSelectionDidChange(_ notification: Notification) {
         guard let tableView = notification.object as? NSTableView else {
@@ -122,4 +115,8 @@ private extension Bundle {
             ?? CommandLine.arguments.first.map(path)?.basename(dropExtension: true)
             ?? "App"
     }
+}
+
+var NSAppDelegate: AppDelegate {
+    return NSApp.delegate as! AppDelegate
 }

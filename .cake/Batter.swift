@@ -2,4 +2,5 @@
 // Modules are sorted *topologically*.
 @_exported import Dotfiles
 @_exported import Item
+@_exported import Brew
 @_exported import Bakeware
