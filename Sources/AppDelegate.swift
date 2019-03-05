@@ -1,3 +1,4 @@
+import struct CloudKit.CKError
 import AppKit
 import Cake
 
@@ -56,10 +57,15 @@ extension AppDelegate: Dotfiles.SyncDelegate {
     }
 
     func dotfilesSyncError(_ error: Error) {
-        let note = NSUserNotification()
-        note.title = error.title
-        note.informativeText = error.legibleDescription
-        NSUserNotificationCenter.default.deliver(note)
+        switch error {
+        case CKError.notAuthenticated:
+            dotfilesViewController?.signedOutLabel.isHidden = false
+        default:
+            let note = NSUserNotification()
+            note.title = error.title
+            note.informativeText = error.legibleDescription
+            NSUserNotificationCenter.default.deliver(note)
+        }
     }
 
     @IBAction func upload(sender: NSButton) {

@@ -3,6 +3,7 @@ import AppKit
 class DotfilesViewController: NSViewController {
     @IBOutlet var tableView: NSTableView!
     @IBOutlet var filenameColumn: NSTableColumn!
+    @IBOutlet var signedOutLabel: NSTextField!
 
     override func viewDidLoad() {
         tableView.delegate = NSAppDelegate

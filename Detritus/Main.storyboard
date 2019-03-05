@@ -745,21 +745,35 @@
                                     <rect key="frame" x="224" y="17" width="15" height="102"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
-                                <tableHeaderView key="headerView" id="XY7-AR-BzD">
+                                <tableHeaderView key="headerView" wantsLayer="YES" id="XY7-AR-BzD">
                                     <rect key="frame" x="0.0" y="0.0" width="388" height="23"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableHeaderView>
                             </scrollView>
+                            <textField hidden="YES" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="ANu-G1-boX">
+                                <rect key="frame" x="113" y="118" width="164" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="160" id="OhR-KM-8Yv"/>
+                                </constraints>
+                                <textFieldCell key="cell" selectable="YES" alignment="center" title="Dotfile sync requires you be signed into iCloud." id="r9g-Vl-S5M">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="ANu-G1-boX" firstAttribute="centerY" secondItem="m2S-Jp-Qdl" secondAttribute="centerY" id="Gfb-zi-wb5"/>
                             <constraint firstAttribute="trailing" secondItem="aib-aP-cW3" secondAttribute="trailing" id="Iyx-Ff-Iio"/>
                             <constraint firstItem="aib-aP-cW3" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="OWz-od-vDP"/>
                             <constraint firstItem="aib-aP-cW3" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" id="UDg-Q7-P6f"/>
                             <constraint firstAttribute="bottom" secondItem="aib-aP-cW3" secondAttribute="bottom" id="WAx-js-cfy"/>
+                            <constraint firstItem="ANu-G1-boX" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="awV-dp-hHT"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="filenameColumn" destination="a7a-IU-LvS" id="Xu5-HP-SZO"/>
+                        <outlet property="signedOutLabel" destination="ANu-G1-boX" id="HCj-fa-LDI"/>
                         <outlet property="tableView" destination="JTM-B5-hUC" id="5CZ-Pr-JfV"/>
                     </connections>
                 </viewController>
