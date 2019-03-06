@@ -4,6 +4,4 @@ if: type != push OR branch = master OR branch =~ /^\d+\.\d+(\.\d+)?(-\S*)?$/
 os: osx
 language: swift
 osx_image: xcode10.2
-xcode_scheme: Workbench
-xcode_project: Workbench.xcodeproj
-xcode_destination: platform=macOS
+script: set -o pipefail && xcodebuild -scheme Workbench PROVISIONING_PROFILE="" DEVELOPMENT_TEAM="" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | xcpretty
