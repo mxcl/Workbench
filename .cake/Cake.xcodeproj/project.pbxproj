@@ -945,7 +945,7 @@ DAA9F9B983CE55D38B2F125BAD56FC0E /* Project object */ = {
 		"$(PROJECT_DIR)/Dependencies.json",
 	);
 	runOnlyForDeploymentPostprocessing = 0;
-	shellPath = /usr/bin/swift;
+	shellPath = "$(DT_TOOLCHAIN_DIR)/usr/bin/swift";
 	shellScript = "import func Darwin.fputs\nimport var Darwin.stderr\nimport ScriptingBridge\nimport AppKit\n\nfunc print(_ objs: Any...) {\n    let str = objs.reduce(into: \"\") { $0.append(\" \\($1)\") }\n    fputs(str, stderr)\n}\n\nlet apps = NSRunningApplication.runningApplications(withBundleIdentifier: \"dev.mxcl.Cake\")\n\nswitch apps.count {\ncase 0:\n    print(\"warning: Cake.app not running, Cakefile changes will not take effect\")\ncase 1:\n    guard let bundle = apps[0].bundleURL else {\n        print(\"Failed to obtain Cake.app location\")\n        exit(1)\n    }\n    guard let projectDir = ProcessInfo.processInfo.environment[\"PROJECT_DIR\"] else {\n        print(\"Failed to obtain PROJECT_DIR\")\n        exit(2)\n    }\n    let path = bundle.appendingPathComponent(\"Contents/MacOS/cake-build\").path\n    let task = Process()\n    task.launchPath = path\n    task.arguments = [String(apps[0].processIdentifier), projectDir]\n    try task.run()\n    task.waitUntilExit()\n    exit(task.terminationStatus)\ndefault:\n    print(\"error: More than one instance of Cake.app is running\")\n    exit(3)\n}\n";
 	showEnvVarsInLog = 0;
 };
@@ -955,6 +955,7 @@ B0CCAA5D1D192F6963E1F5560239A386 /* Determine Version */ = {
 	files = (
 	);
 	inputPaths = (
+		../.git/refs/tags,
 	);
 	name = "Determine Version";
 	outputPaths = (
@@ -962,7 +963,7 @@ B0CCAA5D1D192F6963E1F5560239A386 /* Determine Version */ = {
 	);
 	runOnlyForDeploymentPostprocessing = 0;
 	shellPath = /bin/sh;
-	shellScript = "v=$(git describe --tags --always --abbrev=0)\nn=$(git rev-list HEAD --count)\n\necho \"CURRENT_PROJECT_VERSION = $n\" > Version.xcconfig\necho \"SEMANTIC_PROJECT_VERSION = $v\" >> Version.xcconfig\necho \"SEMANTIC_PROJECT_VERSION[config=Debug] = $v-debug\" >> Version.xcconfig\n";
+	shellScript = "v=$(git describe --tags --always --abbrev=0)\nn=$(git rev-list HEAD --count)\n\nif [[ -z $v ]]; then v=\"0.0.0\"; fi\nif [[ -z $n ]]; then n=\"0\"; fi\n\necho \"CURRENT_PROJECT_VERSION = $n\" > Version.xcconfig\necho \"SEMANTIC_PROJECT_VERSION = $v\" >> Version.xcconfig\necho \"SEMANTIC_PROJECT_VERSION[config=Debug] = $v-debug\" >> Version.xcconfig\n";
 	showEnvVarsInLog = 0;
 };
 /* End PBXShellScriptBuildPhase section */
@@ -1434,6 +1435,10 @@ FF994AE096EBA0604808BB082B2C3790 /* PBXTargetDependency */ = {
 	buildSettings = {
 		LD = /usr/bin/true;
 		OTHER_SWIFT_FLAGS = (
+			"-I",
+			"$(HOME)/Library/Developer/Cake/DerivedData/$(XCODE_PRODUCT_BUILD_VERSION)/lib",
+			"-L",
+			"$(HOME)/Library/Developer/Cake/DerivedData/$(XCODE_PRODUCT_BUILD_VERSION)/lib",
 		);
 		PRODUCT_MODULE_NAME = Script;
 		PRODUCT_NAME = CakefileScript;
@@ -1516,6 +1521,10 @@ BF01A86C4D19E080F58AF28A3610DF80 /* Release */ = {
 	buildSettings = {
 		LD = /usr/bin/true;
 		OTHER_SWIFT_FLAGS = (
+			"-I",
+			"$(HOME)/Library/Developer/Cake/DerivedData/$(XCODE_PRODUCT_BUILD_VERSION)/lib",
+			"-L",
+			"$(HOME)/Library/Developer/Cake/DerivedData/$(XCODE_PRODUCT_BUILD_VERSION)/lib",
 		);
 		PRODUCT_MODULE_NAME = Script;
 		PRODUCT_NAME = CakefileScript;
