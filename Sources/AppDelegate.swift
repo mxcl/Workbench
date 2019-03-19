@@ -20,7 +20,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     var dotfilesViewController: DotfilesViewController? {
-        return rootViewController?.children.first as? DotfilesViewController
+        return rootViewController?.tabViewController?.children.first as? DotfilesViewController
     }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
