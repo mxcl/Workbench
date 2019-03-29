@@ -38,7 +38,6 @@ extension AppDelegate {
     }
 
     @objc private func showAddFilesPanel(sender: Any) {
-        guard let window = rootViewController?.view.window else { return }
 
         func add(_ urls: [URL]) {
             addButton.isEnabled = false
@@ -61,7 +60,7 @@ extension AppDelegate {
         panel.directoryURL = Path.home.url
         panel.treatsFilePackagesAsDirectories = true
         panel.isExtensionHidden = false
-        panel.beginSheetModal(for: window) { rsp in
+        panel.begin { rsp in
             if rsp == .OK {
                 add(panel.urls)
             }
