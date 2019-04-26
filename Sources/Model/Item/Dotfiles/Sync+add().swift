@@ -14,6 +14,7 @@ extension Sync {
         ".ssh/known_hosts",
         ".lldbinit",
         ".profile",
+        ".zshrc",
     ].map(Path.home.join)
 
     public struct AddError: Swift.Error {
