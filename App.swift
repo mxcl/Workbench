@@ -1,21 +1,28 @@
 import UserNotifications
 import SwiftUI
 import Path
-
-let sink = Path.home.Library.join("Mobile Documents/com~apple~CloudDocs/.workbench")
+import os
 
 extension PathStruct {
     var rebased: PathStruct {
-        sink.join(relative(to: Path.home))
+        .sink.join(relative(to: Path.home))
     }
+}
+
+extension Pathish where Self == PathStruct {
+    static var sink: Self { Path.home.Library.join("Mobile Documents/com~apple~CloudDocs/.workbench") }
 }
 
 @main
 class App: SwiftUI.App, FSWatcherDelegate {
     required init() {
 
+        registerAsLoginItem()
+
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert]) { granted, error in
-            print(granted, error ?? "")
+            if let error = error {
+                self.logger.error("\(error.localizedDescription)")
+            }
         }
 
         let paths = [
@@ -38,9 +45,10 @@ class App: SwiftUI.App, FSWatcherDelegate {
         }
 
         watcher.delegate = self
-        watcher.observe = Set(paths)
+        watcher.observe = Set(paths + [.sink])
     }
 
+    let logger = Logger()
     let watcher = FSWatcher()
 
     var body: some Scene {
@@ -51,30 +59,63 @@ class App: SwiftUI.App, FSWatcherDelegate {
 
     func fsWatcher(diff: FSWatcher.Diff) {
         do {
-            for filename in diff.changed {
-                guard filename.isFile else { continue }
-                try filename.copy(into: sink.join(filename.relative(to: Path.home)).parent.mkdir(.p))
+            for src in diff.changed {
+                guard src.isFile else { continue }
+
+                let dst: PathStruct
+                if src.string.starts(with: Path.sink.string) {
+                    // iCloud updated the file underneath us
+                    dst = try .home.join(src.relative(to: .sink)).parent.mkdir(.p)
+                } else {
+                    dst = try .sink.join(src.relative(to: Path.home)).parent.mkdir(.p)
+                }
+
+                logger.info("cp: `\(src)` to `\(dst)`")
+
+                try src.copy(.atomically, into: dst, overwrite: true)
             }
-            for filename in diff.renamed {
-                print(filename)
+            for src in diff.renamed {
+                logger.info("renamed: `\(src.from)` to \(src.to)")
             }
-            for filename in diff.deleted {
-                try sink.join(filename.relative(to: Path.home)).delete()
+            for src in diff.deleted {
+                try Path.sink.join(src.relative(to: Path.home)).delete()
+                logger.info("deleted: `\(src)`")
             }
         } catch {
-            let content = UNMutableNotificationContent()
-            content.title = "Error"
-            content.body = error.localizedDescription
+            alert(error: error)
+        }
+    }
 
-            let uuidString = UUID().uuidString
-            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.01, repeats: false)
-            let request = UNNotificationRequest(identifier: uuidString, content: content, trigger: trigger)
+    func alert(error: Error) {
+        let content = UNMutableNotificationContent()
+        content.title = "Error"
+        content.body = error.localizedDescription
 
-            UNUserNotificationCenter.current().add(request) { error in
-                if let error = error {
-                    print("error:", error)
-                }
+        let uuidString = UUID().uuidString
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.01, repeats: false)
+        let request = UNNotificationRequest(identifier: uuidString, content: content, trigger: trigger)
+
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                self.logger.error("\(error.localizedDescription)")
             }
         }
+    }
+}
+
+extension PathStruct {
+    enum Namespace { case atomically }
+
+    func copy<P: Pathish>(_: Namespace, into dst: P, overwrite: Bool = false) throws {
+        let src = self
+        let tmpurl = try FileManager.default.url(for: .itemReplacementDirectory, in: .userDomainMask, appropriateFor: dst.url, create: true)
+        guard let tmp = PathStruct(url: tmpurl) else { throw CocoaError(.fileNoSuchFile) }
+        let tmpfile = try src.copy(into: tmp)
+
+        if let mtime = src.mtime {
+            try FileManager.default.setAttributes([.modificationDate: mtime], ofItemAtPath: tmpfile.string)
+        }
+
+        try tmp.join(src.basename()).move(into: dst, overwrite: true)
     }
 }

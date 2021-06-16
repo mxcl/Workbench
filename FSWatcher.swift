@@ -14,16 +14,16 @@ public class FSWatcher {
     {}
 
     public struct Diff {
-        public let changed: Set<Path>
-        public let renamed: [(from: Path, to: Path)]
-        public let deleted: Set<Path>
+
+        public fileprivate(set) var changed = Set<Path>()
+        public fileprivate(set) var renamed = [(from: Path, to: Path)]()
+        public fileprivate(set) var deleted = Set<Path>()
     }
 
     private var stream: FSEventStreamRef?
 
     public weak var delegate: FSWatcherDelegate? {
         didSet {
-            print("F")
             if delegate == nil {
                 pause()
             } else {
@@ -52,7 +52,7 @@ public class FSWatcher {
         //TODO ideally a non main queue run loop
 
         var context = FSEventStreamContext(version: 0, info: UnsafeMutableRawPointer(mutating: Unmanaged.passUnretained(self).toOpaque()), retain: nil, release: nil, copyDescription: nil)
-        stream = FSEventStreamCreate(kCFAllocatorDefault, innerEventCallback, &context, paths, FSEventStreamEventId(kFSEventStreamEventIdSinceNow), 0, UInt32(kFSEventStreamCreateFlagUseCFTypes | kFSEventStreamCreateFlagFileEvents | kFSEventStreamCreateFlagIgnoreSelf | kFSEventStreamCreateFlagNoDefer))
+        stream = FSEventStreamCreate(kCFAllocatorDefault, innerEventCallback, &context, paths, FSEventStreamEventId(kFSEventStreamEventIdSinceNow), 0, UInt32(kFSEventStreamCreateFlagUseCFTypes | kFSEventStreamCreateFlagFileEvents | kFSEventStreamCreateFlagIgnoreSelf))
         FSEventStreamScheduleWithRunLoop(stream!, RunLoop.current.getCFRunLoop(), CFRunLoopMode.defaultMode.rawValue)
         FSEventStreamStart(stream!)
     }
@@ -69,7 +69,22 @@ public class FSWatcher {
         let fsWatcher = unsafeBitCast(contextInfo, to: FSWatcher.self)
         let pathStrings = unsafeBitCast(eventPaths, to: NSArray.self) as! [String]
         let paths = pathStrings.compactMap(Path.init)
-        //TODO handle event flags https://developer.apple.com/documentation/coreservices/1455361-fseventstreameventflags
-        fsWatcher.delegate?.fsWatcher(diff: Diff(changed: Set(paths), renamed: [], deleted: []))
+        
+        var diff = Diff()
+
+        for i in 0..<numEvents {
+            let path = paths[i]
+            let id = eventIds.advanced(by: i).pointee
+            var flags = eventFlags.advanced(by: i).pointee
+
+            if (flags & FSEventStreamEventFlags(kFSEventStreamEventFlagItemRemoved)) != 0 {
+                diff.deleted.insert(path)
+            }
+            if (flags & FSEventStreamEventFlags(kFSEventStreamEventFlagItemModified)) != 0 {
+                diff.changed.insert(path)
+            }
+        }
+
+        fsWatcher.delegate?.fsWatcher(diff: diff)
     }
 }
