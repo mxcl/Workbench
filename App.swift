@@ -10,7 +10,7 @@ extension PathStruct {
 }
 
 extension Pathish where Self == PathStruct {
-    static var sink: Self { Path.home.Library.join("Mobile Documents/com~apple~CloudDocs/.workbench") }
+    static var sink: Self { .home.Library.join("Mobile Documents/com~apple~CloudDocs/.workbench") }
 }
 
 @main
@@ -21,7 +21,7 @@ class App: SwiftUI.App, FSWatcherDelegate {
 
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert]) { granted, error in
             if let error = error {
-                self.logger.error("\(error.localizedDescription)")
+                self.logger.error("\(error.localizedDescription, privacy: .public)")
             }
         }
 
@@ -70,16 +70,16 @@ class App: SwiftUI.App, FSWatcherDelegate {
                     dst = try .sink.join(src.relative(to: Path.home)).parent.mkdir(.p)
                 }
 
-                logger.info("cp: `\(src)` to `\(dst)`")
+                logger.info("cp: `\(src, privacy: .public)` to `\(dst, privacy: .public)`")
 
                 try src.copy(.atomically, into: dst, overwrite: true)
             }
             for src in diff.renamed {
-                logger.info("renamed: `\(src.from)` to \(src.to)")
+                logger.info("renamed: `\(src.from, privacy: .public)` to \(src.to, privacy: .public)")
             }
             for src in diff.deleted {
                 try Path.sink.join(src.relative(to: Path.home)).delete()
-                logger.info("deleted: `\(src)`")
+                logger.info("deleted: `\(src, privacy: .public)`")
             }
         } catch {
             alert(error: error)
@@ -97,7 +97,7 @@ class App: SwiftUI.App, FSWatcherDelegate {
 
         UNUserNotificationCenter.current().add(request) { error in
             if let error = error {
-                self.logger.error("\(error.localizedDescription)")
+                self.logger.error("\(error.localizedDescription, privacy: .public)")
             }
         }
     }
