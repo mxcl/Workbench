@@ -37,6 +37,8 @@ class App: SwiftUI.App, FSWatcherDelegate {
             ".zshrc"
         ].map(Path.home.join)
 
+        logger.debug("\(Path.home, privacy: .public)")
+
         for file in paths {
             let dst = file.rebased
             if !dst.exists {

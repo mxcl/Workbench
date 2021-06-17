@@ -1,6 +1,7 @@
 import Foundation
 
 extension App {
+#if !DEBUG
     private var isAlreadyLoginItem: Bool {
         guard
             let loginItemsRef = LSSharedFileListCreate(nil, kLSSharedFileListSessionLoginItems.takeRetainedValue(), nil)?.takeRetainedValue() as LSSharedFileList?,
@@ -20,6 +21,7 @@ extension App {
         }
         return false
     }
+#endif
 
     func registerAsLoginItem() {
     #if !DEBUG

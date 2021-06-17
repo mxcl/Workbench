@@ -1,16 +1,18 @@
-//
-//  ContentView.swift
-//  Workbench
-//
-//  Created by Max Howell on 6/16/21.
-//
-
 import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        Text("""
+            `cp` files or directories from your home directory to
+            the `.workbench` directory in your iCloud Drive.
+            Workbench detects changes to either copy and maintains
+            synchronization between them. Thus changes propogate to
+            your other computers.
+
+            We have installed ourselves as a Login Item, you can
+            close this Window.
+            """
+        ).padding()
     }
 }
 
