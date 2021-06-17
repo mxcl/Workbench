@@ -30,11 +30,12 @@ class App: SwiftUI.App, SynctronDelegate {
 
         let content = UNMutableNotificationContent()
         content.title = "Error"
-        content.body = error.localizedDescription
+        content.subtitle = error.localizedDescription
+        content.body = "\(error)"
 
-        let uuidString = UUID().uuidString
+        let id = UUID().uuidString
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.01, repeats: false)
-        let request = UNNotificationRequest(identifier: uuidString, content: content, trigger: trigger)
+        let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
 
         UNUserNotificationCenter.current().add(request) { error in
             if let error = error {
