@@ -6,7 +6,7 @@ import Path
 
 
 public protocol FSWatcherDelegate: AnyObject {
-    func fsWatcher(diff: FSWatcher.Diff)
+    func fsWatcher(event: FSWatcher.Event, path: PathStruct)
 }
 
 public class FSWatcher {
@@ -65,6 +65,12 @@ public class FSWatcher {
         if let stream = stream { FSEventStreamStop(stream) }
     }
 
+    public enum Event {
+        case created
+        case modified
+        case deleted
+    }
+
     private let innerEventCallback: FSEventStreamCallback = { (stream, contextInfo, numEvents, eventPaths, eventFlags, eventIds) in
         let fsWatcher = unsafeBitCast(contextInfo, to: FSWatcher.self)
         let pathStrings = unsafeBitCast(eventPaths, to: NSArray.self) as! [String]
@@ -77,14 +83,17 @@ public class FSWatcher {
             let id = eventIds.advanced(by: i).pointee
             var flags = eventFlags.advanced(by: i).pointee
 
-            if (flags & FSEventStreamEventFlags(kFSEventStreamEventFlagItemRemoved)) != 0 {
-                diff.deleted.insert(path)
+            // ordered so if somehow they all happen the delegate probably is safe
+
+            if (flags & FSEventStreamEventFlags(kFSEventStreamEventFlagItemCreated)) != 0 {
+                fsWatcher.delegate?.fsWatcher(event: .created, path: path)
             }
             if (flags & FSEventStreamEventFlags(kFSEventStreamEventFlagItemModified)) != 0 {
-                diff.changed.insert(path)
+                fsWatcher.delegate?.fsWatcher(event: .modified, path: path)
+            }
+            if (flags & FSEventStreamEventFlags(kFSEventStreamEventFlagItemRemoved)) != 0 {
+                fsWatcher.delegate?.fsWatcher(event: .deleted, path: path)
             }
         }
-
-        fsWatcher.delegate?.fsWatcher(diff: diff)
     }
 }
