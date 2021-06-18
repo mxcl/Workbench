@@ -87,7 +87,7 @@ private extension PathStruct {
     }
 }
 
-private extension Pathish where Self == PathStruct {
+extension Pathish where Self == PathStruct {
     static var sink: Self { .home.Library.join("Mobile Documents/com~apple~CloudDocs/.workbench") }
 }
 
