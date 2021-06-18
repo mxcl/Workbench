@@ -5,6 +5,21 @@ struct ContentView: View {
     @Environment(\.openURL) var openURL
 
     var body: some View {
+        NavigationView {
+            List {
+                NavigationLink(destination: Instructions()) {
+                    Label("Instructions", systemImage: "map")
+                }
+                NavigationLink(destination: Text("")) {
+                    Label("Logs", systemImage: "text.alignleft")
+                }
+            }.listStyle(SidebarListStyle())
+        }
+    }
+}
+
+struct Instructions: View {
+    var body: some View {
         VStack(spacing: 20) {
             Text("""
                 `cp` files or directories from your home directory to
