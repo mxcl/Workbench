@@ -10,7 +10,7 @@ struct ContentView: View {
                 NavigationLink(destination: Instructions()) {
                     Label("Instructions", systemImage: "map")
                 }
-                NavigationLink(destination: Text("")) {
+                NavigationLink(destination: LogView()) {
                     Label("Logs", systemImage: "text.alignleft")
                 }
             }.listStyle(SidebarListStyle())

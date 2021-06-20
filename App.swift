@@ -3,6 +3,8 @@ import SwiftUI
 import Path
 import os
 
+import OSLog
+
 @main
 class App: SwiftUI.App, SynctronDelegate {
     required init() {
@@ -17,7 +19,7 @@ class App: SwiftUI.App, SynctronDelegate {
     }
 
     let synctron: Synctron
-    let logger = Logger()
+    let logger = Logger(subsystem: "dev.mxcl.workbench", category: "sync")
 
     var body: some Scene {
         WindowGroup {

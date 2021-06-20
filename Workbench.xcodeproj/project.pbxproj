@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6309FF91267FB4A200D9CCAE /* LogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6309FF90267FB4A200D9CCAE /* LogView.swift */; };
 		637D44B4267A876B00B63545 /* App+Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637D44B3267A876B00B63545 /* App+Login.swift */; };
 		6385BC94267B940400353D14 /* Synctron.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6385BC93267B940400353D14 /* Synctron.swift */; };
 		63F011ED267A382D005123AE /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F011EC267A382D005123AE /* App.swift */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6309FF90267FB4A200D9CCAE /* LogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogView.swift; sourceTree = "<group>"; };
 		637D44B3267A876B00B63545 /* App+Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "App+Login.swift"; sourceTree = "<group>"; };
 		6385BC93267B940400353D14 /* Synctron.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Synctron.swift; sourceTree = "<group>"; };
 		63F011E9267A382D005123AE /* Workbench.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Workbench.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -50,6 +52,7 @@
 				63F011EC267A382D005123AE /* App.swift */,
 				637D44B3267A876B00B63545 /* App+Login.swift */,
 				63F011EE267A382D005123AE /* ContentView.swift */,
+				6309FF90267FB4A200D9CCAE /* LogView.swift */,
 				63F011FA267A3866005123AE /* FSWatcher.swift */,
 				6385BC93267B940400353D14 /* Synctron.swift */,
 				63F011F0267A382E005123AE /* Assets.xcassets */,
@@ -152,6 +155,7 @@
 			files = (
 				63F011FB267A3866005123AE /* FSWatcher.swift in Sources */,
 				63F011EF267A382D005123AE /* ContentView.swift in Sources */,
+				6309FF91267FB4A200D9CCAE /* LogView.swift in Sources */,
 				63F011ED267A382D005123AE /* App.swift in Sources */,
 				637D44B4267A876B00B63545 /* App+Login.swift in Sources */,
 				6385BC94267B940400353D14 /* Synctron.swift in Sources */,

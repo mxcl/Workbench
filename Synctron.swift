@@ -42,6 +42,8 @@ class Synctron: FSWatcherDelegate {
     }
 
     func handle(event: FSWatcher.Event, path src: Path) throws {
+        guard src.basename() != ".DS_Store" else { return }
+
         switch event {
         case .modified, .created:
             guard src.isFile else {
