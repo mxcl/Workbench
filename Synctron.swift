@@ -96,13 +96,17 @@ private extension PathStruct {
 
     func copy<P: Pathish>(_: Namespace, into dst: P, overwrite: Bool = false) throws {
         let src = self
-        let tmpurl = try FileManager.default.url(for: .itemReplacementDirectory, in: .userDomainMask, appropriateFor: dst.url, create: true)
+        let dst = dst.join(src.basename())
+        let fm = FileManager()
+        let tmpurl = try fm.url(for: .itemReplacementDirectory, in: .userDomainMask, appropriateFor: dst.url, create: true)
         guard let tmp = PathStruct(url: tmpurl) else { throw CocoaError(.fileNoSuchFile) }
         let tmpfile = try src.copy(into: tmp)
 
         if let mtime = src.mtime {
-            try FileManager.default.setAttributes([.modificationDate: mtime], ofItemAtPath: tmpfile.string)
+            try fm.setAttributes([.modificationDate: mtime], ofItemAtPath: tmpfile.string)
         }
+
+        //try fm.replaceItem(at: dst.url, withItemAt: tmpfile.url, backupItemName: nil, options: [], resultingItemURL: nil)
 
         try tmp.join(src.basename()).move(into: dst, overwrite: true)
     }
