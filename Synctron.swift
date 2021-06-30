@@ -59,9 +59,14 @@ class Synctron: FSWatcherDelegate {
                 dst = try .sink.join(src.relative(to: Path.home)).parent.mkdir(.p)
             }
 
-            logger.info("cp: `\(src, privacy: .public)` to `\(dst, privacy: .public)`")
+            logger.info("""
+                pending: cp [1] [2]
+                [1]: \(src, privacy: .public)
+                [2]: \(dst, privacy: .public)
+                """)
 
             try src.copy(.atomically, into: dst, overwrite: true)
+
         case .deleted:
             let dst = Path.sink.join(src.relative(to: Path.home))
             if dst.isFile {
@@ -99,8 +104,10 @@ private extension PathStruct {
     func copy<P: Pathish>(_: Namespace, into dst: P, overwrite: Bool = false) throws {
         let src = self
         let dst = dst.join(src.basename())
+
         let fm = FileManager()
         let tmpurl = try fm.url(for: .itemReplacementDirectory, in: .userDomainMask, appropriateFor: dst.url, create: true)
+
         guard let tmp = PathStruct(url: tmpurl) else { throw CocoaError(.fileNoSuchFile) }
         let tmpfile = try src.copy(into: tmp)
 
@@ -108,8 +115,6 @@ private extension PathStruct {
             try fm.setAttributes([.modificationDate: mtime], ofItemAtPath: tmpfile.string)
         }
 
-        //try fm.replaceItem(at: dst.url, withItemAt: tmpfile.url, backupItemName: nil, options: [], resultingItemURL: nil)
-
-        try tmp.join(src.basename()).move(into: dst, overwrite: true)
+        try fm.replaceItem(at: dst.url, withItemAt: tmpfile.url, backupItemName: nil, options: [], resultingItemURL: nil)
     }
 }
